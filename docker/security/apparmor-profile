@@ -1,0 +1,173 @@
+#include <tunables/global>
+
+profile tournament-executor flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+  #include <abstractions/nameservice>
+  #include <abstractions/python>
+  #include <abstractions/java>
+  #include <abstractions/gcc>
+  #include <abstractions/go>
+
+  # Deny dangerous operations
+  deny /proc/sys/** w,
+  deny /sys/** w,
+  deny /dev/** w,
+  deny /etc/** w,
+  deny /var/** w,
+  deny /usr/** w,
+  deny /bin/** w,
+  deny /sbin/** w,
+  deny /lib/** w,
+  deny /lib64/** w,
+  deny /home/** w,
+  deny /root/** w,
+  deny /tmp/** w,
+  deny /var/tmp/** w,
+
+  # Allow read access to workspace
+  /workspace/data/** r,
+  /workspace/submissions/** r,
+  /workspace/temp/** rw,
+
+  # Allow writing to results directory
+  /workspace/results/** rw,
+
+  # Allow writing to logs directory
+  /workspace/logs/** rw,
+
+  # Allow reading security configuration
+  /workspace/security/** r,
+
+  # Allow basic system operations
+  /proc/cpuinfo r,
+  /proc/meminfo r,
+  /proc/stat r,
+  /proc/uptime r,
+  /proc/loadavg r,
+  /proc/self/status r,
+  /proc/self/maps r,
+  /proc/self/stat r,
+  /proc/self/statm r,
+  /proc/self/fd/ r,
+  /proc/self/fd/* r,
+
+  # Allow time-related operations
+  /etc/localtime r,
+  /etc/timezone r,
+
+  # Allow basic file operations
+  /tmp/ rw,
+  /tmp/** rw,
+  /var/tmp/ rw,
+  /var/tmp/** rw,
+
+  # Allow compilation and execution
+  /usr/bin/java mrix,
+  /usr/bin/python3 mrix,
+  /usr/bin/g++ mrix,
+  /usr/bin/gcc mrix,
+  /usr/bin/go mrix,
+  /usr/lib/** r,
+  /usr/lib64/** r,
+  /usr/include/** r,
+
+  # Allow basic system libraries
+  /lib/** r,
+  /lib64/** r,
+  /usr/lib/** r,
+  /usr/lib64/** r,
+
+  # Allow temporary files during compilation
+  /tmp/** rw,
+  /var/tmp/** rw,
+
+  # Deny network access
+  deny network inet,
+  deny network inet6,
+  deny network unix,
+
+  # Deny process manipulation
+  deny /proc/*/fd/** w,
+  deny /proc/*/mem w,
+  deny /proc/*/maps w,
+  deny /proc/*/stat w,
+  deny /proc/*/statm w,
+  deny /proc/*/status w,
+
+  # Allow basic process operations
+  /proc/self/exe r,
+  /proc/self/fd/ r,
+  /proc/self/fd/* r,
+
+  # Deny dangerous capabilities
+  deny capability sys_admin,
+  deny capability sys_module,
+  deny capability sys_rawio,
+  deny capability sys_ptrace,
+  deny capability sys_pacct,
+  deny capability sys_boot,
+  deny capability sys_chroot,
+  deny capability sys_time,
+  deny capability sys_nice,
+  deny capability sys_resource,
+  deny capability sys_signal,
+  deny capability sys_tty_config,
+
+  # Allow basic capabilities
+  capability chown,
+  capability setgid,
+  capability setuid,
+
+  # Deny file system operations
+  deny /dev/ rw,
+  deny /dev/** rw,
+  deny /sys/ rw,
+  deny /sys/** rw,
+  deny /proc/sys/ rw,
+  deny /proc/sys/** rw,
+
+  # Allow reading basic system information
+  /proc/version r,
+  /proc/cmdline r,
+  /proc/mounts r,
+  /proc/filesystems r,
+
+  # Deny access to user directories
+  deny /home/ r,
+  deny /home/** r,
+  deny /root/ r,
+  deny /root/** r,
+
+  # Deny access to system configuration
+  deny /etc/passwd r,
+  deny /etc/group r,
+  deny /etc/shadow r,
+  deny /etc/sudoers r,
+  deny /etc/hosts r,
+  deny /etc/resolv.conf r,
+
+  # Allow basic file operations in workspace
+  /workspace/ r,
+  /workspace/** rw,
+
+  # Deny access to other directories
+  deny / r,
+  deny /** r,
+
+  # Allow specific operations in workspace
+  /workspace/data/** r,
+  /workspace/submissions/** r,
+  /workspace/temp/** rw,
+  /workspace/results/** rw,
+  /workspace/logs/** rw,
+  /workspace/security/** r,
+
+  # Deny all other access
+  deny /** rw,
+}
+
+
+
+
+
+

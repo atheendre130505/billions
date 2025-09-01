@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Billion Row Challenge</title>
+    <meta name="description" content="Optimize code, compete globally, win the challenge">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">🏆</span>
+                <span class="logo-text">Billion Row</span>
+            </div>
+            <div class="nav-auth" id="navAuth">
+                <button class="btn-signin" id="signInBtn">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    The Ultimate <span class="highlight">Performance</span> Challenge
+                </h1>
+                <p class="hero-subtitle">
+                    Optimize your code to process one billion rows in record time. 
+                    Compete with developers worldwide and claim your spot on the leaderboard.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn-primary" id="getStartedBtn">Get Started</button>
+                    <button class="btn-secondary" id="viewLeaderboardBtn">View Leaderboard</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-animation">
+                    <div class="code-line">def process_billion_rows():</div>
+                    <div class="code-line">    start_time = time.time()</div>
+                    <div class="code-line">    # Your optimized code here</div>
+                    <div class="code-line">    return time.time() - start_time</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Challenge Section -->
+        <section class="challenge" id="challengeSection">
+            <div class="container">
+                <h2 class="section-title">The Challenge</h2>
+                <div class="challenge-grid">
+                    <div class="challenge-card">
+                        <div class="card-icon">📊</div>
+                        <h3>Process 1B Rows</h3>
+                        <p>Read, parse, and aggregate one billion data rows as fast as possible</p>
+                    </div>
+                    <div class="challenge-card">
+                        <div class="card-icon">⚡</div>
+                        <h3>Optimize Performance</h3>
+                        <p>Use any language, any technique to achieve the fastest execution time</p>
+                    </div>
+                    <div class="challenge-card">
+                        <div class="card-icon">🏅</div>
+                        <h3>Compete & Win</h3>
+                        <p>Submit via GitHub PR and compete on the real-time leaderboard</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard Section -->
+        <section class="leaderboard" id="leaderboardSection">
+            <div class="container">
+                <h2 class="section-title">Global Leaderboard</h2>
+                <div class="leaderboard-container">
+                    <div class="leaderboard-header">
+                        <span class="rank-header">Rank</span>
+                        <span class="user-header">User</span>
+                        <span class="time-header">Time</span>
+                        <span class="language-header">Language</span>
+                    </div>
+                    <div class="leaderboard-entries" id="leaderboardEntries">
+                        <!-- Leaderboard entries will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Submit Section -->
+        <section class="submit" id="submitSection">
+            <div class="container">
+                <h2 class="section-title">Submit Your Solution</h2>
+                <div class="submit-content">
+                    <div class="submit-info">
+                        <h3>Ready to compete?</h3>
+                        <p>Submit your optimized solution through GitHub and see how you rank against the world's best developers.</p>
+                        <div class="submit-steps">
+                            <div class="step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Fork the repository</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Add your solution</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Create a PR</span>
+                            </div>
+                        </div>
+                        <button class="btn-primary" id="submitSolutionBtn">Submit Solution</button>
+                    </div>
+                    <div class="submit-visual">
+                        <div class="github-flow">
+                            <div class="flow-step">📁 Fork</div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">💻 Code</div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">🚀 PR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-icon">🏆</span>
+                    <span class="logo-text">Billion Row Challenge</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#challengeSection">Challenge</a>
+                    <a href="#leaderboardSection">Leaderboard</a>
+                    <a href="#submitSection">Submit</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Billion Row Challenge. Built for developers, by developers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sign In</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="g_id_onload"
+                     data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                     data-callback="handleCredentialResponse"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-size="large"
+                     data-theme="outline"
+                     data-text="sign_in_with"
+                     data-shape="rectangular"
+                     data-logo_alignment="left">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
+</body>
+</html>
+
+
+
+
+
+

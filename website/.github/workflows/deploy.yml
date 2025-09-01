@@ -1,0 +1,117 @@
+name: Deploy Tournament Website to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'website/**'
+      - '.github/workflows/deploy.yml'
+  
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'website/**'
+      - '.github/workflows/deploy.yml'
+  
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'github-pages'
+        type: choice
+        options:
+          - github-pages
+          - staging
+
+env:
+  WEBSITE_DIR: website
+  BUILD_DIR: website/dist
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd ${{ env.WEBSITE_DIR }}
+          npm ci
+
+      - name: Build website
+        run: |
+          cd ${{ env.WEBSITE_DIR }}
+          npm run build
+
+      - name: Test website
+        run: |
+          cd ${{ env.WEBSITE_DIR }}
+          npm run test
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-build
+          path: ${{ env.BUILD_DIR }}
+
+  deploy-preview:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: website-build
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Deploy to GitHub Pages (Preview)
+        uses: peaceiris/actions-gh-pages@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ env.BUILD_DIR }}
+          destination_dir: preview/${{ github.event.number }}
+
+  deploy-production:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: github-pages
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: website-build
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ env.BUILD_DIR }}
+
+      - name: Notify deployment
+        run: |
+          echo "🚀 Tournament website deployed successfully!"
+          echo "🌐 URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          echo "📅 Deployed at: $(date -u)"
+
+
+
+
+
+

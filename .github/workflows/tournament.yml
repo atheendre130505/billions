@@ -1,0 +1,176 @@
+name: 🏆 Tournament Submission Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'submissions/**'
+      - '.github/workflows/tournament.yml'
+
+  workflow_dispatch:
+    inputs:
+      language:
+        description: 'Language to test'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - java
+          - python
+          - cpp
+          - go
+
+jobs:
+  validate-submission:
+    name: 🔍 Validate Submission
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install jsonschema
+          
+      - name: Validate submission format
+        run: |
+          python scripts/validate_submission.py
+          
+      - name: Check file naming
+        run: |
+          ./scripts/check_naming.sh
+          
+      - name: Basic syntax check
+        run: |
+          ./scripts/syntax_check.sh
+
+  test-submission:
+    name: 🧪 Test Submission
+    runs-on: ubuntu-latest
+    needs: validate-submission
+    
+    strategy:
+      matrix:
+        language: [java, python, cpp, go]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup ${{ matrix.language }}
+        uses: actions/setup-${{ matrix.language }}@v4
+        with:
+          ${{ matrix.language }}-version: |
+            ${{ matrix.language == 'java' && '17' || '' }}
+            ${{ matrix.language == 'python' && '3.11' || '' }}
+            ${{ matrix.language == 'go' && '1.21' || '' }}
+            
+      - name: Install C++ dependencies
+        if: matrix.language == 'cpp'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ build-essential
+          
+      - name: Generate test data
+        run: |
+          ./scripts/generate_data.sh
+          
+      - name: Test ${{ matrix.language }} solution
+        run: |
+          ./scripts/test_solution.sh ${{ matrix.language }} submissions/${{ matrix.language }}/*.${{ matrix.language == 'java' && 'java' || matrix.language == 'python' && 'py' || matrix.language == 'cpp' && 'cpp' || 'go' }}
+          
+      - name: Performance benchmark
+        run: |
+          ./scripts/benchmark.sh ${{ matrix.language }}
+          
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.language }}-results
+          path: results/
+
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    needs: validate-submission
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Run security scan
+        run: |
+          ./scripts/security_scan.sh
+          
+      - name: Check for malicious patterns
+        run: |
+          ./scripts/security_check.sh
+
+  comment-results:
+    name: 💬 Comment Results
+    runs-on: ubuntu-latest
+    needs: [test-submission, security-scan]
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download all results
+        uses: actions/download-artifact@v4
+        with:
+          path: results/
+          
+      - name: Generate summary
+        run: |
+          ./scripts/generate_summary.sh
+          
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('results/summary.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+
+  update-leaderboard:
+    name: 🏅 Update Leaderboard
+    runs-on: ubuntu-latest
+    needs: [test-submission, comment-results]
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download results
+        uses: actions/download-artifact@v4
+        with:
+          path: results/
+          
+      - name: Update leaderboard
+        run: |
+          ./scripts/update_leaderboard.sh
+          
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./results
+          publish_branch: gh-pages
+
+
