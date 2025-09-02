@@ -222,36 +222,140 @@ class BillionRowApp {
     handleDownloadDataset() {
         console.log('Download dataset button clicked!');
         
-        // Create a simple download script for users
-        const downloadScript = `#!/bin/bash
-# Download 1M row test dataset for local development
-echo "🚀 Downloading 1M Row Test Dataset..."
-echo "📦 This dataset is for local development and testing"
+        // Show loading notification
+        this.showNotification('📥 Preparing download...', 'info');
+        
+        // Create a comprehensive download package
+        const downloadPackage = `#!/bin/bash
+# Billion Row Challenge - Test Dataset Downloader
+# This script downloads the 1M row test dataset for local development
+
+echo "🚀 Billion Row Challenge - Test Dataset Downloader"
+echo "=================================================="
+echo ""
+echo "📦 This will download a 1M row test dataset (13MB)"
+echo "💡 Perfect for local development and testing your algorithms"
 echo ""
 
 # Create data directory
+echo "📁 Creating data directory..."
 mkdir -p data
 
-# Download the 1M row dataset
+# Download the 1M row dataset from multiple sources
 echo "📥 Downloading measurements_1m.txt..."
-curl -L -o data/measurements_1m.txt "https://raw.githubusercontent.com/atheendre130505/billions/main/data/measurements_1m.txt"
+echo "   Attempting download from GitHub..."
+
+# Try multiple download methods
+if command -v curl >/dev/null 2>&1; then
+    # Method 1: Direct from GitHub (if available)
+    if curl -L -f -o data/measurements_1m.txt "https://raw.githubusercontent.com/atheendre130505/billions/main/data/measurements_1m.txt" 2>/dev/null; then
+        echo "   ✅ Downloaded from GitHub"
+    else
+        echo "   ⚠️  GitHub download failed, trying alternative..."
+        # Method 2: Generate locally (fallback)
+        echo "   🔄 Generating 1M row dataset locally..."
+        python3 -c "
+import random
+import os
+
+# Create data directory
+os.makedirs('data', exist_ok=True)
+
+# Weather stations (same as in the challenge)
+stations = [
+    'Abha', 'Abidjan', 'Abéché', 'Abu Dhabi', 'Abuja', 'Accra', 'Addis Ababa', 'Adelaide', 'Aden', 'Ahvaz',
+    'Albuquerque', 'Alexandria', 'Algiers', 'Almaty', 'Amman', 'Amsterdam', 'Anadyr', 'Anchorage', 'Andorra la Vella', 'Ankara',
+    'Antananarivo', 'Antsiranana', 'Arkhangelsk', 'Ashgabat', 'Asmara', 'Assab', 'Astana', 'Athens', 'Atlanta', 'Auckland',
+    'Austin', 'Baghdad', 'Baguio', 'Baku', 'Baltimore', 'Bamako', 'Bangkok', 'Bangui', 'Banjul', 'Barcelona',
+    'Bata', 'Batumi', 'Beijing', 'Beirut', 'Belgrade', 'Belize City', 'Benghazi', 'Bergen', 'Berlin', 'Bilbao',
+    'Birao', 'Bishkek', 'Bissau', 'Blantyre', 'Bloemfontein', 'Boise', 'Bordeaux', 'Bosaso', 'Boston', 'Bouaké',
+    'Bratislava', 'Brazzaville', 'Bridgetown', 'Brisbane', 'Brno', 'Brussels', 'Bucharest', 'Budapest', 'Bujumbura', 'Bulawayo',
+    'Burnie', 'Busan', 'Cabo San Lucas', 'Cairo', 'Calgary', 'Canberra', 'Cape Town', 'Caracas', 'Casablanca', 'Castries',
+    'Cayenne', 'Cebu', 'Changchun', 'Changsha', 'Charlotte', 'Chiang Mai', 'Chicago', 'Chihuahua', 'Chișinău', 'Chittagong',
+    'Chongqing', 'Christchurch', 'City of San Marino', 'Colombo', 'Columbus', 'Conakry', 'Copenhagen', 'Cotonou', 'Cracow', 'Curitiba',
+    'Daegu', 'Dakar', 'Dallas', 'Damascus', 'Dammam', 'Dar es Salaam', 'Darwin', 'Denpasar', 'Denver', 'Detroit',
+    'Dhaka', 'Dikson', 'Dili', 'Djibouti', 'Dodoma', 'Dolisie', 'Douala', 'Dubai', 'Dublin', 'Dunedin',
+    'Durban', 'Dushanbe', 'Edinburgh', 'Edmonton', 'El Paso', 'Entebbe', 'Erbil', 'Erzurum', 'Fairbanks', 'Fianarantsoa',
+    'Flores, Petén', 'Frankfurt', 'Fresno', 'Fukuoka', 'Gabès', 'Gaborone', 'Gagnoa', 'Gangtok', 'Garissa', 'Garoua',
+    'George Town', 'Ghanzi', 'Gjoa Haven', 'Guadalajara', 'Guangzhou', 'Guatemala City', 'Halifax', 'Hamburg', 'Hamilton', 'Hanga Roa',
+    'Hanoi', 'Harare', 'Harbin', 'Hargeisa', 'Hat Yai', 'Havana', 'Helsinki', 'Heraklion', 'Hiroshima', 'Ho Chi Minh City',
+    'Hobart', 'Hong Kong', 'Honiara', 'Honolulu', 'Houston', 'Ifrane', 'Indianapolis', 'Iqaluit', 'Irkutsk', 'Istanbul',
+    'İzmir', 'Jacksonville', 'Jakarta', 'Jayapura', 'Jerusalem', 'Johannesburg', 'Jos', 'Juba', 'Kabul', 'Kampala',
+    'Kandi', 'Kankan', 'Kano', 'Kansas City', 'Karachi', 'Karonga', 'Kathmandu', 'Khartoum', 'Kiev', 'Kigali',
+    'Kikwit', 'Kinshasa', 'Kolkata', 'Kuala Lumpur', 'Kumasi', 'Kunming', 'Kuopio', 'Kuwait City', 'Kyiv', 'Kyoto',
+    'La Ceiba', 'La Paz', 'Lagos', 'Lahore', 'Lake Havasu City', 'Lake Tekapo', 'Lanzhou', 'Las Palmas', 'Las Vegas', 'Launceston',
+    'Lhasa', 'Libreville', 'Lisbon', 'Livingstone', 'Ljubljana', 'Lodwar', 'Lomé', 'London', 'Los Angeles', 'Louisville',
+    'Luanda', 'Lubumbashi', 'Lusaka', 'Luxembourg City', 'Lviv', 'Lyon', 'Madrid', 'Mahajanga', 'Makassar', 'Makurdi',
+    'Malabo', 'Malé', 'Managua', 'Manama', 'Mandalay', 'Mango', 'Manila', 'Maputo', 'Marrakesh', 'Marseille',
+    'Maun', 'Medan', 'Medellín', 'Melbourne', 'Memphis', 'Mexicali', 'Mexico City', 'Miami', 'Milan', 'Milwaukee',
+    'Minneapolis', 'Minsk', 'Mogadishu', 'Mombasa', 'Monaco', 'Moncton', 'Monrovia', 'Monterrey', 'Montreal', 'Moscow',
+    'Mumbai', 'Murmansk', 'Muscat', 'Mzuzu', 'N\'Djamena', 'Naha', 'Nairobi', 'Nakhon Ratchasima', 'Napier', 'Napier',
+    'Nashville', 'Nassau', 'Ndola', 'New Delhi', 'New Orleans', 'New York City', 'Ngaoundéré', 'Niamey', 'Nicosia', 'Niigata',
+    'Nouadhibou', 'Nouakchott', 'Novosibirsk', 'Nuuk', 'Odesa', 'Odienné', 'Oklahoma City', 'Omaha', 'Oranjestad', 'Oslo',
+    'Ottawa', 'Ouagadougou', 'Ouahigouya', 'Ouarzazate', 'Oulu', 'Palembang', 'Palermo', 'Palm Springs', 'Palembang', 'Panama City',
+    'Parakou', 'Paris', 'Perth', 'Petropavlovsk-Kamchatsky', 'Philadelphia', 'Phnom Penh', 'Phoenix', 'Pittsburgh', 'Podgorica', 'Pointe-Noire',
+    'Pontianak', 'Port Moresby', 'Port Sudan', 'Port Vila', 'Port-Gentil', 'Portland', 'Porto', 'Prague', 'Praia', 'Pretoria',
+    'Pyongyang', 'Rabat', 'Rangpur', 'Reggane', 'Reykjavík', 'Riga', 'Riyadh', 'Rome', 'Rosario', 'Roseau',
+    'Rostov-on-Don', 'Sacramento', 'Saint Petersburg', 'Saint-Pierre', 'Salt Lake City', 'San Antonio', 'San Diego', 'San Francisco', 'San José', 'San Juan',
+    'San Salvador', 'Sana\'a', 'Santo Domingo', 'São Paulo', 'São Tomé', 'Sapporo', 'Sarajevo', 'Saskatoon', 'Seattle', 'Ségou',
+    'Seoul', 'Seville', 'Shanghai', 'Singapore', 'Skopje', 'Sochi', 'Sofia', 'Sokoto', 'Split', 'St. John\'s',
+    'St. Louis', 'Stockholm', 'Suva', 'Suwałki', 'Sydney', 'Tabora', 'Tabriz', 'Tallinn', 'Tamale', 'Tamanrasset',
+    'Tampa', 'Tashkent', 'Tauranga', 'Tbilisi', 'Tegucigalpa', 'Tehran', 'Tel Aviv', 'Thessaloniki', 'Thiès', 'Tijuana',
+    'Timbuktu', 'Tirana', 'Toamasina', 'Tokyo', 'Toliara', 'Toluca', 'Toronto', 'Tripoli', 'Tromsø', 'Tucson',
+    'Tunis', 'Ulaanbaatar', 'Upington', 'Ürümqi', 'Vaduz', 'Valencia', 'Valletta', 'Vancouver', 'Veracruz', 'Vienna',
+    'Vientiane', 'Villahermosa', 'Vilnius', 'Virginia Beach', 'Vladivostok', 'Warsaw', 'Washington, D.C.', 'Wau', 'Wellington', 'Whitehorse',
+    'Wichita', 'Willemstad', 'Winnipeg', 'Wrocław', 'Xi\'an', 'Yakutsk', 'Yangon', 'Yaoundé', 'Yellowknife', 'Yerevan',
+    'Yinchuan', 'Zagreb', 'Zanzibar City', 'Zürich'
+]
+
+# Generate 1M measurements
+print('Generating 1M temperature measurements...')
+with open('data/measurements_1m.txt', 'w') as f:
+    for i in range(1000000):
+        station = random.choice(stations)
+        temp = round(random.uniform(-99.9, 99.9), 1)
+        f.write(f'{station}={temp}\n')
+        if (i + 1) % 100000 == 0:
+            print(f'Progress: {(i + 1) / 10000:.1f}% ({i + 1:,}/1,000,000 rows)')
+
+print('✅ Dataset generation complete!')
+" 2>/dev/null || echo "   ❌ Python not available, cannot generate dataset"
+    fi
+elif command -v wget >/dev/null 2>&1; then
+    wget -O data/measurements_1m.txt "https://raw.githubusercontent.com/atheendre130505/billions/main/data/measurements_1m.txt" 2>/dev/null && echo "   ✅ Downloaded with wget" || echo "   ❌ Download failed"
+else
+    echo "   ❌ Neither curl nor wget available"
+    exit 1
+fi
 
 # Verify download
 if [ -f "data/measurements_1m.txt" ]; then
+    echo ""
     echo "✅ Download complete!"
     echo "📊 File size: $(du -h data/measurements_1m.txt | cut -f1)"
     echo "📈 Line count: $(wc -l < data/measurements_1m.txt)"
+    echo "🏷️  Sample data:"
+    head -5 data/measurements_1m.txt | sed 's/^/   /'
+    echo "   ..."
     echo ""
     echo "🎉 Test dataset ready!"
-    echo "💡 You can now test your solution with:"
-    echo "   python3 scripts/validate-submission.py submissions/python/solution.py --language python --input data/measurements_1m.txt"
+    echo ""
+    echo "💡 Next steps:"
+    echo "   1. Test your solution:"
+    echo "      python3 scripts/validate-submission.py submissions/python/solution.py --language python --input data/measurements_1m.txt"
+    echo ""
+    echo "   2. Optimize your algorithm"
+    echo "   3. Submit via Pull Request for billion-row testing"
+    echo ""
+    echo "🚀 Happy coding!"
 else
     echo "❌ Download failed!"
+    echo "💡 Please check your internet connection and try again"
     exit 1
 fi`;
 
         // Create and download the script file
-        const blob = new Blob([downloadScript], { type: 'text/plain' });
+        const blob = new Blob([downloadPackage], { type: 'text/plain' });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -263,6 +367,19 @@ fi`;
         
         // Show success notification with instructions
         this.showNotification('📥 Download script created! Run: chmod +x download-test-dataset.sh && ./download-test-dataset.sh', 'success');
+        
+        // Also offer direct download
+        setTimeout(() => {
+            if (confirm('Would you like to download the dataset directly as well?')) {
+                const directLink = document.createElement('a');
+                directLink.href = 'measurements_1m.txt';
+                directLink.download = 'measurements_1m.txt';
+                document.body.appendChild(directLink);
+                directLink.click();
+                document.body.removeChild(directLink);
+                this.showNotification('📥 Direct download started!', 'success');
+            }
+        }, 1000);
         
         console.log('Dataset download script created');
     }
