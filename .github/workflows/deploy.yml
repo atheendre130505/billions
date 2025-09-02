@@ -1,10 +1,19 @@
-name: Deploy to Firebase Hosting
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
@@ -14,30 +23,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: Install Firebase CLI
-      run: npm install -g firebase-tools
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
       
     - name: Build project
       run: |
-        echo "Building Firebase project..."
-        # Add any build steps here if needed
+        echo "Building project for GitHub Pages..."
+        # Copy website files to root for GitHub Pages
+        cp -r website/* ./
+        # Create .nojekyll to bypass Jekyll processing
+        touch .nojekyll
         
-    - name: Deploy to Firebase
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '.'
+        
+    - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      run: |
-        firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
-      env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        
-    - name: Deploy Preview
-      if: github.event_name == 'pull_request'
-      run: |
-        firebase hosting:channel:deploy pr-${{ github.event.number }} --token ${{ secrets.FIREBASE_TOKEN }}
-      env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      id: deployment
+      uses: actions/deploy-pages@v4
