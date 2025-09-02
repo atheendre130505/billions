@@ -62,14 +62,17 @@ View live rankings and compete with developers worldwide!
 
 ## 🎮 **Game Master**
 
-For game master instructions, see: [GAME_MASTER_GUIDE.md](GAME_MASTER_GUIDE.md)
+For complete setup and game master instructions:
+- **Setup Guide**: [SETUP_GUIDE.md](SETUP_GUIDE.md) - Complete setup from scratch
+- **Game Master Guide**: [GAME_MASTER_GUIDE.md](GAME_MASTER_GUIDE.md) - Competition management
 
 ## 📊 **Current Status**
 
 - **Website**: ✅ Live and functional
 - **Validation System**: ✅ Working for all languages
 - **Test Dataset**: ✅ Available for download (1M rows)
-- **Billion Dataset**: 🔄 Generating (5.4GB/13GB, 41% complete)
+- **Billion Dataset**: ✅ Ready for game master (13GB)
+- **Setup Guide**: ✅ Complete instructions for game master
 
 ## 🚀 **Ready to Compete?**
 
