@@ -1,6 +1,6 @@
 /**
- * Billion Row Challenge - Main Application
- * Clean, simple UI with Google sign-in and essential functionality
+ * Billion Row Challenge - Firebase-Powered Application
+ * Modern UI with Firebase Authentication and Firestore database
  */
 
 class BillionRowApp {
@@ -10,16 +10,32 @@ class BillionRowApp {
         this.init();
     }
 
-    init() {
+    async init() {
+        // Wait for Firebase to load
+        await this.waitForFirebase();
         this.bindEvents();
-        this.loadLeaderboard();
-        this.setupGoogleSignIn();
+        this.setupFirebaseAuth();
+        await this.loadLeaderboard();
+    }
+
+    async waitForFirebase() {
+        return new Promise((resolve) => {
+            const checkFirebase = () => {
+                if (window.firebase) {
+                    resolve();
+                } else {
+                    setTimeout(checkFirebase, 100);
+                }
+            };
+            checkFirebase();
+        });
     }
 
     bindEvents() {
         // Navigation and button events
         document.getElementById('signInBtn')?.addEventListener('click', () => this.showAuthModal());
         document.getElementById('closeModal')?.addEventListener('click', () => this.hideAuthModal());
+        document.getElementById('googleSignInBtn')?.addEventListener('click', () => this.handleGoogleSignIn());
         document.getElementById('getStartedBtn')?.addEventListener('click', () => this.scrollToSection('submitSection'));
         document.getElementById('viewLeaderboardBtn')?.addEventListener('click', () => this.scrollToSection('leaderboardSection'));
         document.getElementById('submitSolutionBtn')?.addEventListener('click', () => this.handleSubmitSolution());
@@ -41,34 +57,45 @@ class BillionRowApp {
         });
     }
 
-    setupGoogleSignIn() {
-        // Google Sign-In callback
-        window.handleCredentialResponse = (response) => {
-            this.handleGoogleSignIn(response);
-        };
+    setupFirebaseAuth() {
+        const { auth, onAuthStateChanged } = window.firebase;
+        
+        // Listen for authentication state changes
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.currentUser = {
+                    uid: user.uid,
+                    name: user.displayName,
+                    email: user.email,
+                    picture: user.photoURL
+                };
+                this.updateUIAfterSignIn();
+            } else {
+                this.currentUser = null;
+                this.updateUIAfterSignOut();
+            }
+        });
     }
 
-    async handleGoogleSignIn(response) {
+    async handleGoogleSignIn() {
         try {
-            // Decode the JWT token
-            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            const { auth, signInWithPopup, provider } = window.firebase;
+            const result = await signInWithPopup(auth, provider);
             
             this.currentUser = {
-                id: payload.sub,
-                name: payload.name,
-                email: payload.email,
-                picture: payload.picture
+                uid: result.user.uid,
+                name: result.user.displayName,
+                email: result.user.email,
+                picture: result.user.photoURL
             };
 
             this.updateUIAfterSignIn();
             this.hideAuthModal();
-            
-            // Store user info in localStorage
-            localStorage.setItem('billionRowUser', JSON.stringify(this.currentUser));
+            this.showNotification('Successfully signed in!', 'success');
             
             console.log('User signed in:', this.currentUser);
         } catch (error) {
-            console.error('Error handling Google sign-in:', error);
+            console.error('Error signing in:', error);
             this.showNotification('Sign-in failed. Please try again.', 'error');
         }
     }
@@ -86,10 +113,7 @@ class BillionRowApp {
         }
     }
 
-    signOut() {
-        this.currentUser = null;
-        localStorage.removeItem('billionRowUser');
-        
+    updateUIAfterSignOut() {
         const navAuth = document.getElementById('navAuth');
         if (navAuth) {
             navAuth.innerHTML = `
@@ -98,8 +122,17 @@ class BillionRowApp {
             // Re-bind the sign-in button event
             document.getElementById('signInBtn')?.addEventListener('click', () => this.showAuthModal());
         }
-        
-        this.showNotification('Signed out successfully', 'success');
+    }
+
+    async signOut() {
+        try {
+            const { auth, signOut } = window.firebase;
+            await signOut(auth);
+            this.showNotification('Signed out successfully', 'success');
+        } catch (error) {
+            console.error('Error signing out:', error);
+            this.showNotification('Error signing out', 'error');
+        }
     }
 
     showAuthModal() {
@@ -128,23 +161,51 @@ class BillionRowApp {
 
     async loadLeaderboard() {
         try {
-            // Simulate loading leaderboard data
-            // In a real app, this would fetch from your API
-            this.leaderboardData = [
-                { rank: 1, user: 'speed_demon', time: '2.34s', language: 'C++' },
-                { rank: 2, user: 'python_master', time: '3.12s', language: 'Python' },
-                { rank: 3, user: 'java_ninja', time: '3.45s', language: 'Java' },
-                { rank: 4, user: 'go_guru', time: '3.78s', language: 'Go' },
-                { rank: 5, user: 'optimizer_pro', time: '4.23s', language: 'C++' },
-                { rank: 6, user: 'data_cruncher', time: '4.67s', language: 'Python' },
-                { rank: 7, user: 'performance_king', time: '5.01s', language: 'Java' },
-                { rank: 8, user: 'speed_racer', time: '5.34s', language: 'Go' }
-            ];
+            const { db, collection, getDocs, query, orderBy, limit } = window.firebase;
+            
+            // Try to load from Firestore first
+            const leaderboardRef = collection(db, 'leaderboard');
+            const q = query(leaderboardRef, orderBy('executionTime', 'asc'), limit(10));
+            const snapshot = await getDocs(q);
+            
+            if (!snapshot.empty) {
+                this.leaderboardData = [];
+                let rank = 1;
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    this.leaderboardData.push({
+                        rank: rank++,
+                        user: data.userName || 'Anonymous',
+                        time: `${data.executionTime}s`,
+                        language: data.language || 'Unknown'
+                    });
+                });
+            } else {
+                // Fallback to sample data if Firestore is empty
+                this.leaderboardData = [
+                    { rank: 1, user: 'speed_demon', time: '2.34s', language: 'C++' },
+                    { rank: 2, user: 'python_master', time: '3.12s', language: 'Python' },
+                    { rank: 3, user: 'java_ninja', time: '3.45s', language: 'Java' },
+                    { rank: 4, user: 'go_guru', time: '3.78s', language: 'Go' },
+                    { rank: 5, user: 'optimizer_pro', time: '4.23s', language: 'C++' },
+                    { rank: 6, user: 'data_cruncher', time: '4.67s', language: 'Python' },
+                    { rank: 7, user: 'performance_king', time: '5.01s', language: 'Java' },
+                    { rank: 8, user: 'speed_racer', time: '5.34s', language: 'Go' }
+                ];
+            }
 
             this.renderLeaderboard();
         } catch (error) {
             console.error('Error loading leaderboard:', error);
-            this.showNotification('Failed to load leaderboard', 'error');
+            // Use sample data as fallback
+            this.leaderboardData = [
+                { rank: 1, user: 'speed_demon', time: '2.34s', language: 'C++' },
+                { rank: 2, user: 'python_master', time: '3.12s', language: 'Python' },
+                { rank: 3, user: 'java_ninja', time: '3.45s', language: 'Java' },
+                { rank: 4, user: 'go_guru', time: '3.78s', language: 'Go' }
+            ];
+            this.renderLeaderboard();
+            this.showNotification('Using sample data - Firebase not configured', 'warning');
         }
     }
 

@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access to leaderboard for all users
+    match /leaderboard/{document} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Allow read/write access to submissions for authenticated users
+    match /submissions/{document} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Allow read access to results for all users
+    match /results/{document} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
