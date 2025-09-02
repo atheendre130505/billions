@@ -8,29 +8,29 @@ git clone https://github.com/atheendre130505/billions.git
 cd billions
 ```
 
-### **2. Download the Dataset**
+### **2. Download Test Dataset (Local Development)**
 ```bash
-# Download the billion-row dataset (13GB)
-curl -L https://raw.githubusercontent.com/atheendre130505/billions/main/download-dataset.sh | bash
+# Download 1M row dataset for local testing (13MB)
+./download-test-dataset.sh
 ```
 
-### **3. Choose Your Language**
+### **3. For Final Submission**
+The billion-row dataset (13GB) will be automatically downloaded during GitHub Actions testing when you submit a Pull Request.
+
+### **4. Choose Your Language**
 Add your solution to the appropriate directory:
 - **Python**: `submissions/python/solution.py`
 - **Java**: `submissions/java/Solution.java`
 - **C++**: `submissions/cpp/solution.cpp`
 - **Go**: `submissions/go/solution.go`
 
-### **4. Test Your Solution**
+### **5. Test Your Solution Locally**
 ```bash
-# Test with the full dataset
-python3 scripts/validate-submission.py submissions/python/solution.py --language python --input data/measurements.txt
-
-# Test with smaller dataset (for development)
+# Test with 1M row dataset (fast development)
 python3 scripts/validate-submission.py submissions/python/solution.py --language python --input data/measurements_1m.txt
 ```
 
-### **5. Submit Your Solution**
+### **6. Submit Your Solution**
 1. **Create a Pull Request** to the main repository
 2. **GitHub Actions** will automatically test your solution
 3. **Results** will be posted to your PR
@@ -67,12 +67,12 @@ Krakow=15.9/15.9/15.9
 
 ### **Local Testing:**
 ```bash
-# Test with 1M rows (fast)
+# Test with 1M rows (fast development)
 python3 scripts/validate-submission.py submissions/python/solution.py --language python --input data/measurements_1m.txt
-
-# Test with full dataset (slow)
-python3 scripts/validate-submission.py submissions/python/solution.py --language python --input data/measurements.txt
 ```
+
+### **Final Testing:**
+The billion-row dataset will be automatically tested when you submit a Pull Request via GitHub Actions.
 
 ### **Validation Output:**
 ```
@@ -95,11 +95,11 @@ python3 scripts/validate-submission.py submissions/python/solution.py --language
 
 ## 🛠️ **Development Tips:**
 
-### **Start Small:**
-1. **Test with 1M rows** first
-2. **Optimize your algorithm**
-3. **Test with full dataset**
-4. **Submit when ready**
+### **Development Workflow:**
+1. **Download test dataset**: `./download-test-dataset.sh`
+2. **Develop your solution** with 1M rows
+3. **Optimize your algorithm**
+4. **Submit Pull Request** for final testing with billion rows
 
 ### **Language-Specific Tips:**
 
