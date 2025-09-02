@@ -219,6 +219,9 @@ class BillionRowApp {
     }
 
     handleSubmitSolution() {
+        console.log('Submit button clicked!');
+        console.log('Current user:', this.currentUser);
+        
         if (!this.currentUser) {
             this.showNotification('Please sign in to submit a solution', 'warning');
             this.showAuthModal();
@@ -226,10 +229,12 @@ class BillionRowApp {
         }
 
         // Show submission modal with instructions
+        console.log('Showing submission modal...');
         this.showSubmissionModal();
     }
 
     showSubmissionModal() {
+        console.log('Creating submission modal...');
         const modal = document.createElement('div');
         modal.id = 'submissionModal';
         modal.className = 'modal';
@@ -284,6 +289,7 @@ if __name__ == "__main__":
         `;
         
         document.body.appendChild(modal);
+        console.log('Modal added to DOM');
         
         // Add event listeners
         document.getElementById('closeSubmissionModal').addEventListener('click', () => {
