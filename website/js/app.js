@@ -39,6 +39,7 @@ class BillionRowApp {
         document.getElementById('getStartedBtn')?.addEventListener('click', () => this.scrollToSection('submitSection'));
         document.getElementById('viewLeaderboardBtn')?.addEventListener('click', () => this.scrollToSection('leaderboardSection'));
         document.getElementById('submitSolutionBtn')?.addEventListener('click', () => this.handleSubmitSolution());
+        document.getElementById('downloadDatasetBtn')?.addEventListener('click', () => this.handleDownloadDataset());
 
         // Modal backdrop click to close
         document.getElementById('authModal')?.addEventListener('click', (e) => {
@@ -216,6 +217,30 @@ class BillionRowApp {
                 </div>
             `).join('');
         }
+    }
+
+    handleDownloadDataset() {
+        console.log('Download dataset button clicked!');
+        
+        // Create download link for the 1M row dataset
+        const downloadUrl = 'https://raw.githubusercontent.com/atheendre130505/billions/main/data/measurements_1m.txt';
+        
+        // Create temporary link element
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = 'measurements_1m.txt';
+        link.target = '_blank';
+        
+        // Add to DOM, click, and remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Show success notification
+        this.showNotification('📥 Download started! Check your downloads folder.', 'success');
+        
+        // Optional: Track download event
+        console.log('Dataset download initiated');
     }
 
     handleSubmitSolution() {

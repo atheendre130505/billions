@@ -67,6 +67,7 @@
                 </p>
                 <div class="hero-actions">
                     <button class="btn-primary" id="getStartedBtn">Get Started</button>
+                    <button class="btn-secondary" id="downloadDatasetBtn">Download Dataset</button>
                     <button class="btn-secondary" id="viewLeaderboardBtn">View Leaderboard</button>
                 </div>
             </div>
@@ -100,16 +101,60 @@
         </div>
     </section>
 
+        <!-- Download Section -->
+        <section class="download" id="downloadSection">
+            <div class="container">
+                <h2 class="section-title">Get Started</h2>
+                <div class="download-content">
+                    <div class="download-info">
+                        <h3>Download Test Dataset</h3>
+                        <p>Start developing with our 1M row test dataset. Perfect for local development and testing your algorithms.</p>
+                        <div class="download-stats">
+                            <div class="stat">
+                                <span class="stat-number">1M</span>
+                                <span class="stat-label">Rows</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">13MB</span>
+                                <span class="stat-label">Size</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">302</span>
+                                <span class="stat-label">Stations</span>
+                            </div>
+                        </div>
+                        <button class="btn-download" id="downloadDatasetBtn">
+                            <span class="btn-icon">📥</span>
+                            <span class="btn-text">Download Test Dataset</span>
+                        </button>
+                        <p class="download-note">💡 Use this dataset for local development. Final testing uses the full billion-row dataset.</p>
+                    </div>
+                    <div class="download-visual">
+                        <div class="dataset-preview">
+                            <div class="preview-header">Sample Data</div>
+                            <div class="preview-content">
+                                <div class="data-line">Chengdu=9.1</div>
+                                <div class="data-line">Berlin=-9.3</div>
+                                <div class="data-line">Krakow=15.9</div>
+                                <div class="data-line">Tampa=27.6</div>
+                                <div class="data-line">...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Submit Section -->
         <section class="submit" id="submitSection">
-        <div class="container">
+            <div class="container">
                 <h2 class="section-title">Submit Your Solution</h2>
                 <div class="submit-content">
                     <div class="submit-info">
                         <h3>Ready to compete?</h3>
                         <p>Submit your optimized solution through GitHub and see how you rank against the world's best developers.</p>
                         <div class="submit-steps">
-                <div class="step">
+                            <div class="step">
                                 <span class="step-number">1</span>
                                 <span class="step-text">Fork the repository</span>
                             </div>
@@ -117,7 +162,7 @@
                                 <span class="step-number">2</span>
                                 <span class="step-text">Add your solution</span>
                             </div>
-                <div class="step">
+                            <div class="step">
                                 <span class="step-number">3</span>
                                 <span class="step-text">Create a PR</span>
                             </div>
@@ -131,11 +176,11 @@
                             <div class="flow-step">💻 Code</div>
                             <div class="flow-arrow">→</div>
                             <div class="flow-step">🚀 PR</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
     </main>
 
     <!-- Footer -->
