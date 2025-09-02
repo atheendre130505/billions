@@ -222,25 +222,49 @@ class BillionRowApp {
     handleDownloadDataset() {
         console.log('Download dataset button clicked!');
         
-        // Create download link for the 1M row dataset
-        const downloadUrl = 'https://raw.githubusercontent.com/atheendre130505/billions/main/data/measurements_1m.txt';
-        
-        // Create temporary link element
+        // Create a simple download script for users
+        const downloadScript = `#!/bin/bash
+# Download 1M row test dataset for local development
+echo "🚀 Downloading 1M Row Test Dataset..."
+echo "📦 This dataset is for local development and testing"
+echo ""
+
+# Create data directory
+mkdir -p data
+
+# Download the 1M row dataset
+echo "📥 Downloading measurements_1m.txt..."
+curl -L -o data/measurements_1m.txt "https://raw.githubusercontent.com/atheendre130505/billions/main/data/measurements_1m.txt"
+
+# Verify download
+if [ -f "data/measurements_1m.txt" ]; then
+    echo "✅ Download complete!"
+    echo "📊 File size: $(du -h data/measurements_1m.txt | cut -f1)"
+    echo "📈 Line count: $(wc -l < data/measurements_1m.txt)"
+    echo ""
+    echo "🎉 Test dataset ready!"
+    echo "💡 You can now test your solution with:"
+    echo "   python3 scripts/validate-submission.py submissions/python/solution.py --language python --input data/measurements_1m.txt"
+else
+    echo "❌ Download failed!"
+    exit 1
+fi`;
+
+        // Create and download the script file
+        const blob = new Blob([downloadScript], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = 'measurements_1m.txt';
-        link.target = '_blank';
-        
-        // Add to DOM, click, and remove
+        link.href = url;
+        link.download = 'download-test-dataset.sh';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
         
-        // Show success notification
-        this.showNotification('📥 Download started! Check your downloads folder.', 'success');
+        // Show success notification with instructions
+        this.showNotification('📥 Download script created! Run: chmod +x download-test-dataset.sh && ./download-test-dataset.sh', 'success');
         
-        // Optional: Track download event
-        console.log('Dataset download initiated');
+        console.log('Dataset download script created');
     }
 
     handleSubmitSolution() {
