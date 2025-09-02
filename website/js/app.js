@@ -225,13 +225,136 @@ class BillionRowApp {
             return;
         }
 
-        // Redirect to GitHub or show submission instructions
-        this.showNotification('Redirecting to GitHub...', 'info');
+        // Show submission modal with instructions
+        this.showSubmissionModal();
+    }
+
+    showSubmissionModal() {
+        const modal = document.createElement('div');
+        modal.id = 'submissionModal';
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🚀 Submit Your Solution</h2>
+                    <button class="close-modal" id="closeSubmissionModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="submission-instructions">
+                        <h3>How to Submit:</h3>
+                        <ol>
+                            <li><strong>Fork the repository:</strong> <a href="https://github.com/atheendre130505/billions" target="_blank">https://github.com/atheendre130505/billions</a></li>
+                            <li><strong>Add your solution</strong> to the <code>submissions/</code> folder</li>
+                            <li><strong>Create a Pull Request</strong> with your solution</li>
+                            <li><strong>We'll test it</strong> and add you to the leaderboard!</li>
+                        </ol>
+                        
+                        <div class="language-tabs">
+                            <h4>Choose your language:</h4>
+                            <div class="tab-buttons">
+                                <button class="tab-btn active" data-lang="python">Python</button>
+                                <button class="tab-btn" data-lang="java">Java</button>
+                                <button class="tab-btn" data-lang="cpp">C++</button>
+                                <button class="tab-btn" data-lang="go">Go</button>
+                            </div>
+                            
+                            <div class="code-example" id="codeExample">
+                                <h5>Python Example:</h5>
+                                <pre><code># submissions/python/solution.py
+def process_billion_rows():
+    # Your optimized solution here
+    pass
+
+if __name__ == "__main__":
+    process_billion_rows()</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="submission-actions">
+                            <button class="btn-primary" onclick="window.open('https://github.com/atheendre130505/billions', '_blank')">
+                                🍴 Fork Repository
+                            </button>
+                            <button class="btn-secondary" onclick="this.closest('.modal').remove()">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
         
-        // In a real app, you might redirect to your GitHub repo
-        setTimeout(() => {
-            window.open('https://github.com/your-username/billion-rows-challenge', '_blank');
-        }, 1000);
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        document.getElementById('closeSubmissionModal').addEventListener('click', () => {
+            modal.remove();
+        });
+        
+        // Language tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.updateCodeExample(e.target.dataset.lang);
+            });
+        });
+        
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
+
+    updateCodeExample(language) {
+        const codeExample = document.getElementById('codeExample');
+        const examples = {
+            python: {
+                title: 'Python Example:',
+                code: `# submissions/python/solution.py
+def process_billion_rows():
+    # Your optimized solution here
+    pass
+
+if __name__ == "__main__":
+    process_billion_rows()`
+            },
+            java: {
+                title: 'Java Example:',
+                code: `// submissions/java/Solution.java
+public class Solution {
+    public static void main(String[] args) {
+        // Your optimized solution here
+    }
+}`
+            },
+            cpp: {
+                title: 'C++ Example:',
+                code: `// submissions/cpp/solution.cpp
+#include <iostream>
+
+int main() {
+    // Your optimized solution here
+    return 0;
+}`
+            },
+            go: {
+                title: 'Go Example:',
+                code: `// submissions/go/solution.go
+package main
+
+func main() {
+    // Your optimized solution here
+}`
+            }
+        };
+        
+        const example = examples[language];
+        codeExample.innerHTML = `
+            <h5>${example.title}</h5>
+            <pre><code>${example.code}</code></pre>
+        `;
     }
 
     showNotification(message, type = 'info') {

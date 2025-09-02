@@ -451,6 +451,146 @@ section {
     color: #ffd700;
 }
 
+/* Submission Modal Styles */
+.submission-instructions {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.submission-instructions h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.submission-instructions ol {
+    margin: 1.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.submission-instructions li {
+    margin: 0.8rem 0;
+    line-height: 1.6;
+}
+
+.submission-instructions code {
+    background: var(--bg-secondary);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #ffd700;
+}
+
+.language-tabs {
+    margin: 2rem 0;
+}
+
+.language-tabs h4 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.tab-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-color);
+}
+
+.tab-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.code-example {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.code-example h5 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.code-example pre {
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 0;
+}
+
+.code-example code {
+    color: #e6e6e6;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.submission-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.submission-actions .btn-primary,
+.submission-actions .btn-secondary {
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.submission-actions .btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.submission-actions .btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.submission-actions .btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.submission-actions .btn-secondary:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-color);
+}
+
 .rank {
     font-weight: 800;
     font-size: 1.2rem;
