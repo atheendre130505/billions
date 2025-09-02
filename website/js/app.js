@@ -246,28 +246,60 @@ class BillionRowApp {
                 </div>
                 <div class="modal-body">
                     <div class="submission-instructions">
-                        <h3>How to Submit:</h3>
-                        <ol>
-                            <li><strong>Fork the repository:</strong> <a href="https://github.com/atheendre130505/billions" target="_blank">https://github.com/atheendre130505/billions</a></li>
-                            <li><strong>Add your solution</strong> to the <code>submissions/</code> folder</li>
-                            <li><strong>Create a Pull Request</strong> with your solution</li>
-                            <li><strong>We'll test it</strong> and add you to the leaderboard!</li>
-                        </ol>
+                        <div class="welcome-section">
+                            <h3>🎯 Ready to Compete?</h3>
+                            <p>Join the Billion Row Challenge and optimize your way to the top of the leaderboard!</p>
+                        </div>
+                        
+                        <div class="steps-container">
+                            <h4>📋 Submission Steps:</h4>
+                            <div class="step-cards">
+                                <div class="step-card">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h5>🍴 Fork Repository</h5>
+                                        <p>Click the button below to fork our repository</p>
+                                    </div>
+                                </div>
+                                <div class="step-card">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h5>💻 Add Your Solution</h5>
+                                        <p>Create your optimized solution in the <code>submissions/</code> folder</p>
+                                    </div>
+                                </div>
+                                <div class="step-card">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h5>📤 Create Pull Request</h5>
+                                        <p>Submit your solution via a pull request</p>
+                                    </div>
+                                </div>
+                                <div class="step-card">
+                                    <div class="step-number">4</div>
+                                    <div class="step-content">
+                                        <h5>🏆 Get Ranked</h5>
+                                        <p>We'll test your solution and add you to the leaderboard!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         
                         <div class="language-tabs">
-                            <h4>Choose your language:</h4>
+                            <h4>🚀 Choose Your Language:</h4>
                             <div class="tab-buttons">
-                                <button class="tab-btn active" data-lang="python">Python</button>
-                                <button class="tab-btn" data-lang="java">Java</button>
-                                <button class="tab-btn" data-lang="cpp">C++</button>
-                                <button class="tab-btn" data-lang="go">Go</button>
+                                <button class="tab-btn active" data-lang="python">🐍 Python</button>
+                                <button class="tab-btn" data-lang="java">☕ Java</button>
+                                <button class="tab-btn" data-lang="cpp">⚡ C++</button>
+                                <button class="tab-btn" data-lang="go">🐹 Go</button>
                             </div>
                             
                             <div class="code-example" id="codeExample">
-                                <h5>Python Example:</h5>
+                                <h5>🐍 Python Example:</h5>
                                 <pre><code># submissions/python/solution.py
 def process_billion_rows():
     # Your optimized solution here
+    # Goal: Process 1 billion rows as fast as possible
     pass
 
 if __name__ == "__main__":
@@ -277,11 +309,15 @@ if __name__ == "__main__":
                         
                         <div class="submission-actions">
                             <button class="btn-primary" onclick="window.open('https://github.com/atheendre130505/billions', '_blank')">
-                                🍴 Fork Repository
+                                🍴 Fork Repository & Start Coding
                             </button>
                             <button class="btn-secondary" onclick="this.closest('.modal').remove()">
-                                Close
+                                Maybe Later
                             </button>
+                        </div>
+                        
+                        <div class="motivation-text">
+                            <p>💡 <strong>Pro Tip:</strong> The fastest solutions often use memory mapping, parallel processing, and optimized data structures!</p>
                         </div>
                     </div>
                 </div>
@@ -329,41 +365,52 @@ if __name__ == "__main__":
         const codeExample = document.getElementById('codeExample');
         const examples = {
             python: {
-                title: 'Python Example:',
+                title: '🐍 Python Example:',
                 code: `# submissions/python/solution.py
 def process_billion_rows():
     # Your optimized solution here
+    # Goal: Process 1 billion rows as fast as possible
+    # Tips: Use pandas, numpy, or multiprocessing
     pass
 
 if __name__ == "__main__":
     process_billion_rows()`
             },
             java: {
-                title: 'Java Example:',
+                title: '☕ Java Example:',
                 code: `// submissions/java/Solution.java
 public class Solution {
     public static void main(String[] args) {
         // Your optimized solution here
+        // Goal: Process 1 billion rows as fast as possible
+        // Tips: Use NIO, parallel streams, or memory mapping
     }
 }`
             },
             cpp: {
-                title: 'C++ Example:',
+                title: '⚡ C++ Example:',
                 code: `// submissions/cpp/solution.cpp
 #include <iostream>
+#include <fstream>
 
 int main() {
     // Your optimized solution here
+    // Goal: Process 1 billion rows as fast as possible
+    // Tips: Use memory mapping, SIMD, or parallel processing
     return 0;
 }`
             },
             go: {
-                title: 'Go Example:',
+                title: '🐹 Go Example:',
                 code: `// submissions/go/solution.go
 package main
 
+import "fmt"
+
 func main() {
     // Your optimized solution here
+    // Goal: Process 1 billion rows as fast as possible
+    // Tips: Use goroutines, channels, or memory mapping
 }`
             }
         };
