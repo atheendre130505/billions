@@ -430,6 +430,27 @@ section {
     border-bottom: none;
 }
 
+.empty-leaderboard {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    margin: 2rem 0;
+}
+
+.empty-leaderboard p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.empty-leaderboard p:first-child {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #ffd700;
+}
+
 .rank {
     font-weight: 800;
     font-size: 1.2rem;

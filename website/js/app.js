@@ -181,31 +181,17 @@ class BillionRowApp {
                     });
                 });
             } else {
-                // Fallback to sample data if Firestore is empty
-                this.leaderboardData = [
-                    { rank: 1, user: 'speed_demon', time: '2.34s', language: 'C++' },
-                    { rank: 2, user: 'python_master', time: '3.12s', language: 'Python' },
-                    { rank: 3, user: 'java_ninja', time: '3.45s', language: 'Java' },
-                    { rank: 4, user: 'go_guru', time: '3.78s', language: 'Go' },
-                    { rank: 5, user: 'optimizer_pro', time: '4.23s', language: 'C++' },
-                    { rank: 6, user: 'data_cruncher', time: '4.67s', language: 'Python' },
-                    { rank: 7, user: 'performance_king', time: '5.01s', language: 'Java' },
-                    { rank: 8, user: 'speed_racer', time: '5.34s', language: 'Go' }
-                ];
+                // No data in Firestore yet - show empty leaderboard
+                this.leaderboardData = [];
             }
 
             this.renderLeaderboard();
         } catch (error) {
             console.error('Error loading leaderboard:', error);
-            // Use sample data as fallback
-            this.leaderboardData = [
-                { rank: 1, user: 'speed_demon', time: '2.34s', language: 'C++' },
-                { rank: 2, user: 'python_master', time: '3.12s', language: 'Python' },
-                { rank: 3, user: 'java_ninja', time: '3.45s', language: 'Java' },
-                { rank: 4, user: 'go_guru', time: '3.78s', language: 'Go' }
-            ];
+            // Show empty leaderboard on error
+            this.leaderboardData = [];
             this.renderLeaderboard();
-            this.showNotification('Using sample data - Firebase not configured', 'warning');
+            this.showNotification('Unable to load leaderboard - check Firebase connection', 'error');
         }
     }
 
@@ -213,14 +199,23 @@ class BillionRowApp {
         const container = document.getElementById('leaderboardEntries');
         if (!container) return;
 
-        container.innerHTML = this.leaderboardData.map(entry => `
-            <div class="leaderboard-entry">
-                <span class="rank">#${entry.rank}</span>
-                <span class="user">${entry.user}</span>
-                <span class="time">${entry.time}</span>
-                <span class="language">${entry.language}</span>
-            </div>
-        `).join('');
+        if (this.leaderboardData.length === 0) {
+            container.innerHTML = `
+                <div class="empty-leaderboard">
+                    <p>🏆 No submissions yet!</p>
+                    <p>Be the first to submit a solution and claim the top spot!</p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = this.leaderboardData.map(entry => `
+                <div class="leaderboard-entry">
+                    <span class="rank">#${entry.rank}</span>
+                    <span class="user">${entry.user}</span>
+                    <span class="time">${entry.time}</span>
+                    <span class="language">${entry.language}</span>
+                </div>
+            `).join('');
+        }
     }
 
     handleSubmitSolution() {
