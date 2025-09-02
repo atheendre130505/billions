@@ -225,7 +225,7 @@ class BillionRowApp {
         document.body.appendChild(notification);
 
         // Auto-remove after 5 seconds
-        setTimeout(() => {
+            setTimeout(() => {
             if (notification.parentNode) {
                 notification.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
