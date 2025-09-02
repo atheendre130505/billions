@@ -5,8 +5,24 @@ import sys
 def main():
     stations = {}
     
+    # Try different input files
+    input_files = ['data/measurements_1m.txt', 'data/measurements.txt', 'data/test_measurements.txt']
+    input_file = None
+    
+    for file_path in input_files:
+        try:
+            with open(file_path, 'r') as f:
+                input_file = file_path
+                break
+        except FileNotFoundError:
+            continue
+    
+    if not input_file:
+        print("Error: No input file found")
+        return
+    
     try:
-        with open('data/test_measurements.txt', 'r') as f:
+        with open(input_file, 'r') as f:
             for line in f:
                 line = line.strip()
                 if not line:

@@ -9,7 +9,16 @@
 
 int main() {
     std::map<std::string, std::vector<double>> stations;
-    std::ifstream file("data/test_measurements.txt");
+    // Try different input files
+    std::vector<std::string> input_files = {"data/measurements_1m.txt", "data/measurements.txt", "data/test_measurements.txt"};
+    std::ifstream file;
+    
+    for (const auto& filename : input_files) {
+        file.open(filename);
+        if (file.is_open()) {
+            break;
+        }
+    }
     std::string line;
     
     if (!file.is_open()) {
