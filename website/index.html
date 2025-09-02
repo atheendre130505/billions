@@ -55,51 +55,53 @@
 
     <!-- Main Content -->
     <main class="main-content">
-    <!-- Hero Section -->
+        <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <h1 class="hero-title">
-                    The Ultimate <span class="highlight">Performance</span> Challenge
-                </h1>
-                <p class="hero-subtitle">
-                    Optimize your code to process one billion rows in record time. 
-                    Compete with developers worldwide and claim your spot on the leaderboard.
-                </p>
-                <div class="hero-actions">
-                    <button class="btn-primary" id="getStartedBtn">Get Started</button>
-                    <button class="btn-secondary" id="downloadDatasetBtn">Download Dataset</button>
-                    <button class="btn-secondary" id="viewLeaderboardBtn">View Leaderboard</button>
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        The Ultimate <span class="highlight">Performance</span> Challenge
+                    </h1>
+                    <p class="hero-subtitle">
+                        Optimize your code to process one billion rows in record time. 
+                        Compete with developers worldwide and claim your spot on the leaderboard.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn-primary" id="getStartedBtn">Get Started</button>
+                        <button class="btn-secondary" id="downloadDatasetBtn">Download Dataset</button>
+                        <button class="btn-secondary" id="viewLeaderboardBtn">View Leaderboard</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="code-animation">
+                        <div class="code-line">def process_billion_rows():</div>
+                        <div class="code-line">    start_time = time.time()</div>
+                        <div class="code-line">    # Your optimized code here</div>
+                        <div class="code-line">    return time.time() - start_time</div>
+                    </div>
                 </div>
             </div>
-            <div class="hero-visual">
-                <div class="code-animation">
-                    <div class="code-line">def process_billion_rows():</div>
-                    <div class="code-line">    start_time = time.time()</div>
-                    <div class="code-line">    # Your optimized code here</div>
-                    <div class="code-line">    return time.time() - start_time</div>
-            </div>
-        </div>
-    </section>
+        </section>
 
 
 
         <!-- Leaderboard Section -->
         <section class="leaderboard" id="leaderboardSection">
-        <div class="container">
+            <div class="container">
                 <h2 class="section-title">Global Leaderboard</h2>
-            <div class="leaderboard-container">
-                <div class="leaderboard-header">
+                <div class="leaderboard-container">
+                    <div class="leaderboard-header">
                         <span class="rank-header">Rank</span>
                         <span class="user-header">User</span>
                         <span class="time-header">Time</span>
                         <span class="language-header">Language</span>
-                </div>
+                    </div>
                     <div class="leaderboard-entries" id="leaderboardEntries">
-                    <!-- Leaderboard entries will be populated here -->
+                        <!-- Leaderboard entries will be populated here -->
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
         <!-- Download Section -->
         <section class="download" id="downloadSection">

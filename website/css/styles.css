@@ -152,6 +152,12 @@ body {
     z-index: 1;
 }
 
+.hero-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .hero-title {
     font-size: 4.5rem;
     font-weight: 800;
@@ -1322,6 +1328,10 @@ section {
         grid-template-columns: 1fr;
         text-align: center;
         gap: 4rem;
+    }
+    
+    .hero-text {
+        text-align: center;
     }
     
     .hero-title {
