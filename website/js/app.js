@@ -291,9 +291,18 @@ if __name__ == "__main__":
         document.body.appendChild(modal);
         console.log('Modal added to DOM');
         
+        // Show the modal
+        setTimeout(() => {
+            modal.classList.add('show');
+            console.log('Modal shown');
+        }, 10);
+        
         // Add event listeners
         document.getElementById('closeSubmissionModal').addEventListener('click', () => {
-            modal.remove();
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.remove();
+            }, 300);
         });
         
         // Language tab switching
@@ -308,7 +317,10 @@ if __name__ == "__main__":
         // Close on backdrop click
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
-                modal.remove();
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.remove();
+                }, 300);
             }
         });
     }
