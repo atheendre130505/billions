@@ -15,7 +15,7 @@ cd billions
 ```
 
 ### **3. For Final Submission**
-The billion-row dataset (13GB) will be automatically downloaded during GitHub Actions testing when you submit a Pull Request.
+Submit your solution via Pull Request. The game master will test it locally with the billion-row dataset.
 
 ### **4. Choose Your Language**
 Add your solution to the appropriate directory:
@@ -72,7 +72,7 @@ python3 scripts/validate-submission.py submissions/python/solution.py --language
 ```
 
 ### **Final Testing:**
-The billion-row dataset will be automatically tested when you submit a Pull Request via GitHub Actions.
+The game master will test your solution with the billion-row dataset when you submit a Pull Request.
 
 ### **Validation Output:**
 ```
@@ -99,7 +99,7 @@ The billion-row dataset will be automatically tested when you submit a Pull Requ
 1. **Download test dataset**: `./download-test-dataset.sh`
 2. **Develop your solution** with 1M rows
 3. **Optimize your algorithm**
-4. **Submit Pull Request** for final testing with billion rows
+4. **Submit Pull Request** for game master testing with billion rows
 
 ### **Language-Specific Tips:**
 
