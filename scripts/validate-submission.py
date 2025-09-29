@@ -199,11 +199,12 @@ class SubmissionValidator:
                     self.add_error(f"Java compilation failed: {compile_result.stderr}")
                     return False, 0
                 
-                # Run compiled class
+                # Run compiled class with a simple test input
                 class_name = os.path.splitext(os.path.basename(solution_file))[0]
                 class_dir = os.path.dirname(solution_file)
+                test_input = "StationA=10.0\nStationB=20.0\n"
                 result = subprocess.run(["java", "-cp", class_dir, class_name], 
-                                      capture_output=True, text=True, timeout=timeout)
+                                      input=test_input, capture_output=True, text=True, timeout=timeout)
             elif language == "cpp":
                 # Compile first
                 output_file = solution_file.replace('.cpp', '.out')
@@ -257,20 +258,40 @@ class SubmissionValidator:
         # Get output
         try:
             if language == "python":
-                result = subprocess.run([sys.executable, solution_file], 
-                                      capture_output=True, text=True, timeout=30)
+                if input_file and os.path.exists(input_file):
+                    with open(input_file, 'r') as f:
+                        result = subprocess.run([sys.executable, solution_file], 
+                                              stdin=f, capture_output=True, text=True, timeout=30)
+                else:
+                    result = subprocess.run([sys.executable, solution_file], 
+                                          capture_output=True, text=True, timeout=30)
             elif language == "java":
                 class_name = os.path.splitext(os.path.basename(solution_file))[0]
                 class_dir = os.path.dirname(solution_file)
-                result = subprocess.run(["java", "-cp", class_dir, class_name], 
-                                      capture_output=True, text=True, timeout=30)
+                if input_file and os.path.exists(input_file):
+                    # Pass input file as argument
+                    result = subprocess.run(["java", "-cp", class_dir, class_name, input_file], 
+                                          capture_output=True, text=True, timeout=30)
+                else:
+                    result = subprocess.run(["java", "-cp", class_dir, class_name], 
+                                          capture_output=True, text=True, timeout=30)
             elif language == "cpp":
                 output_file = solution_file.replace('.cpp', '.out')
-                result = subprocess.run([f"./{output_file}"], 
-                                      capture_output=True, text=True, timeout=30)
+                if input_file and os.path.exists(input_file):
+                    with open(input_file, 'r') as f:
+                        result = subprocess.run([f"./{output_file}"], 
+                                              stdin=f, capture_output=True, text=True, timeout=30)
+                else:
+                    result = subprocess.run([f"./{output_file}"], 
+                                          capture_output=True, text=True, timeout=30)
             elif language == "go":
-                result = subprocess.run(["go", "run", solution_file], 
-                                      capture_output=True, text=True, timeout=30)
+                if input_file and os.path.exists(input_file):
+                    with open(input_file, 'r') as f:
+                        result = subprocess.run(["go", "run", solution_file], 
+                                              stdin=f, capture_output=True, text=True, timeout=30)
+                else:
+                    result = subprocess.run(["go", "run", solution_file], 
+                                          capture_output=True, text=True, timeout=30)
             
             if result.returncode != 0:
                 self.add_error(f"Solution execution failed")
