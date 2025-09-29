@@ -457,6 +457,158 @@ section {
     color: #ffd700;
 }
 
+/* Testing Leaderboard Styles */
+.testing-leaderboard {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border-top: 1px solid rgba(16, 185, 129, 0.2);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.section-subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+.testing-leaderboard-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.testing-leaderboard-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 120px 120px 120px;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    background: rgba(16, 185, 129, 0.1);
+    border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.testing-leaderboard-entries {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.testing-leaderboard-entries::-webkit-scrollbar {
+    width: 8px;
+}
+
+.testing-leaderboard-entries::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+.testing-leaderboard-entries::-webkit-scrollbar-thumb {
+    background: var(--success-color);
+    border-radius: 4px;
+}
+
+.testing-entry {
+    display: grid;
+    grid-template-columns: 80px 1fr 120px 120px 120px;
+    gap: 1.5rem;
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.testing-entry:hover {
+    background: rgba(16, 185, 129, 0.1);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+}
+
+.testing-entry:last-child {
+    border-bottom: none;
+}
+
+.testing-entry .rank {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--success-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testing-entry .solution {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+}
+
+.testing-entry .time {
+    font-weight: 600;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.testing-entry .language {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.testing-entry .language.python {
+    background: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.testing-entry .language.java {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.testing-entry .status {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.testing-entry .status.success {
+    color: var(--success-color);
+}
+
+.testing-info {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.testing-info p {
+    margin: 0.5rem 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+}
+
+.testing-info strong {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
 /* Submission Modal Styles */
 .submission-instructions {
     max-width: 800px;
