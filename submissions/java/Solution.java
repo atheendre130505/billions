@@ -1,31 +1,82 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * Billion Row Challenge - Optimized Java Solution
+ * Uses HashMap for efficient storage and single-pass processing
+ */
 public class Solution {
     public static void main(String[] args) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("data/test_measurements.txt"))) {
-            Map<String, List<Double>> stations = new TreeMap<>();
+        // Use HashMap for efficient storage
+        Map<String, StationData> stations = new HashMap<>();
+        
+        // Read from stdin (standard input)
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             String line;
-            
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("=");
-                String station = parts[0];
-                double temp = Double.parseDouble(parts[1]);
+                line = line.trim();
+                if (line.isEmpty()) continue;
                 
-                stations.computeIfAbsent(station, k -> new ArrayList<>()).add(temp);
-            }
-            
-            for (Map.Entry<String, List<Double>> entry : stations.entrySet()) {
-                List<Double> temps = entry.getValue();
-                double min = temps.stream().mapToDouble(Double::doubleValue).min().orElse(0.0);
-                double max = temps.stream().mapToDouble(Double::doubleValue).max().orElse(0.0);
-                double mean = temps.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+                // Parse station=temperature format
+                int equalIndex = line.indexOf('=');
+                if (equalIndex == -1) continue;
                 
-                System.out.printf("%s=%.1f/%.1f/%.1f%n", entry.getKey(), min, mean, max);
+                String station = line.substring(0, equalIndex);
+                String tempStr = line.substring(equalIndex + 1);
+                
+                try {
+                    double temp = Double.parseDouble(tempStr);
+                    
+                    // Update statistics efficiently
+                    stations.computeIfAbsent(station, k -> new StationData())
+                            .update(temp);
+                } catch (NumberFormatException e) {
+                    // Skip invalid temperature values
+                    continue;
+                }
             }
         } catch (IOException e) {
-            System.err.println("Error reading file: " + e.getMessage());
+            System.err.println("Error reading input: " + e.getMessage());
             System.exit(1);
+        }
+        
+        // Output results in alphabetical order
+        stations.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> {
+                    StationData data = entry.getValue();
+                    System.out.printf("%s=%.1f/%.1f/%.1f%n", 
+                        entry.getKey(), 
+                        data.min, 
+                        data.mean, 
+                        data.max);
+                });
+    }
+    
+    // Helper class to track station statistics
+    static class StationData {
+        double min = Double.POSITIVE_INFINITY;
+        double max = Double.NEGATIVE_INFINITY;
+        double sum = 0.0;
+        int count = 0;
+        
+        void update(double temp) {
+            min = Math.min(min, temp);
+            max = Math.max(max, temp);
+            sum += temp;
+            count++;
+        }
+        
+        double getMean() {
+            return sum / count;
+        }
+        
+        double getMin() {
+            return min;
+        }
+        
+        double getMax() {
+            return max;
         }
     }
 }

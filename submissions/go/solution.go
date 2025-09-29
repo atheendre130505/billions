@@ -9,52 +9,85 @@ import (
 	"strings"
 )
 
-func main() {
-	stations := make(map[string][]float64)
-	
-	file, err := os.Open("data/test_measurements.txt")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error opening file: %v\n", err)
-		os.Exit(1)
-	}
-	defer file.Close()
-	
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		parts := strings.Split(scanner.Text(), "=")
-		if len(parts) == 2 {
-			station := parts[0]
-			temp, err := strconv.ParseFloat(parts[1], 64)
-			if err == nil {
-				stations[station] = append(stations[station], temp)
-			}
+/**
+ * Billion Row Challenge - Optimized Go Solution
+ * Uses map for efficient storage and single-pass processing
+ */
+
+type StationData struct {
+	min   float64
+	max   float64
+	sum   float64
+	count int
+}
+
+func (s *StationData) update(temp float64) {
+	if s.count == 0 {
+		s.min = temp
+		s.max = temp
+	} else {
+		if temp < s.min {
+			s.min = temp
+		}
+		if temp > s.max {
+			s.max = temp
 		}
 	}
-	
-	// Sort station names
+	s.sum += temp
+	s.count++
+}
+
+func (s *StationData) getMean() float64 {
+	return s.sum / float64(s.count)
+}
+
+func main() {
+	stations := make(map[string]*StationData)
+	scanner := bufio.NewScanner(os.Stdin)
+
+	// Read from stdin (standard input)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+
+		// Parse station=temperature format
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) != 2 {
+			continue
+		}
+
+		station := parts[0]
+		tempStr := parts[1]
+
+		temp, err := strconv.ParseFloat(tempStr, 64)
+		if err != nil {
+			// Skip invalid temperature values
+			continue
+		}
+
+		// Update statistics efficiently
+		if stations[station] == nil {
+			stations[station] = &StationData{}
+		}
+		stations[station].update(temp)
+	}
+
+	// Get sorted station names
 	var stationNames []string
 	for station := range stations {
 		stationNames = append(stationNames, station)
 	}
 	sort.Strings(stationNames)
-	
+
+	// Output results in alphabetical order
 	for _, station := range stationNames {
-		temps := stations[station]
-		min := temps[0]
-		max := temps[0]
-		sum := temps[0]
-		
-		for _, temp := range temps[1:] {
-			if temp < min {
-				min = temp
-			}
-			if temp > max {
-				max = temp
-			}
-			sum += temp
-		}
-		
-		mean := sum / float64(len(temps))
-		fmt.Printf("%s=%.1f/%.1f/%.1f\n", station, min, mean, max)
+		data := stations[station]
+		fmt.Printf("%s=%.1f/%.1f/%.1f\n", 
+			station, 
+			data.min, 
+			data.getMean(), 
+			data.max)
 	}
 }
